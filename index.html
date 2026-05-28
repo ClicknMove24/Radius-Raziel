@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>RADIUS // RAZIEL — Friday Afternoon, Jaffa</title>
+<meta name="description" content="A Friday afternoon block party on David Raziel St., Jaffa. From the living room to the pavement." />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Space+Mono:wght@400;700&family=Heebo:wght@400;500;700;800;900&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          sand:       '#F1EADB',
+          'sand-2':   '#E8DFCB',
+          ink:        '#0E0E0C',
+          mustard:    '#D9A441',
+          terracotta: '#C25A2C',
+        },
+        fontFamily: {
+          sans:  ['Inter', 'Heebo', 'system-ui', 'sans-serif'],
+          serif: ['Lora', '"Frank Ruhl Libre"', 'Georgia', 'serif'],
+          mono:  ['"Space Mono"', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  html, body { background-color: #F1EADB; color: #0E0E0C; }
+
+  /* Hebrew snippets get their own font stack */
+  .he {
+    font-family: 'Heebo', 'Inter', system-ui, sans-serif;
+    direction: rtl;
+    unicode-bidi: isolate;
+  }
+  .he-serif {
+    font-family: 'Frank Ruhl Libre', 'Lora', Georgia, serif;
+    direction: rtl;
+    unicode-bidi: isolate;
+  }
+  /* Inline-fit version for use inside mixed-content lines */
+  .he-inline, .he-serif-inline {
+    direction: rtl;
+    unicode-bidi: isolate;
+    display: inline-block;
+  }
+  .he-inline { font-family: 'Heebo', 'Inter', system-ui, sans-serif; }
+  .he-serif-inline { font-family: 'Frank Ruhl Libre', 'Lora', Georgia, serif; }
+
+  /* Brand wordmark always LTR */
+  .brand-mark { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+
+  /* Paper grain on the whole page */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0.18 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  /* Grainy "analog photo" placeholders */
+  .photo-block {
+    background:
+      radial-gradient(120% 80% at 30% 30%, rgba(255,255,255,0.08) 0%, transparent 60%),
+      linear-gradient(180deg, #1a1a17 0%, #0a0a09 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .photo-block::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.95 0 0 0 0 0.85 0 0 0 0 0.65 0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+    mix-blend-mode: screen;
+    opacity: 0.55;
+  }
+  .photo-block::after {
+    content: attr(data-frame);
+    position: absolute;
+    top: 10px; left: 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(241,234,219,0.55);
+  }
+
+
+  /* Marquee */
+  .marquee-track {
+    display: inline-flex;
+    gap: 3rem;
+    padding-right: 3rem;
+    animation: marquee 45s linear infinite;
+    white-space: nowrap;
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* Stencil headline tightness */
+  .stencil {
+    letter-spacing: -0.045em;
+    line-height: 0.82;
+  }
+
+  /* Big watermark coordinates */
+  .watermark {
+    font-family: 'Space Mono', monospace;
+    color: rgba(14,14,12,0.05);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  /* Inputs */
+  input::placeholder, textarea::placeholder { color: rgba(14,14,12,0.35); }
+  input:focus, textarea:focus, select:focus { outline: none; background: rgba(14,14,12,0.04); }
+
+  /* Stamp rotation */
+  .stamp {
+    transform: rotate(-6deg);
+    transform-origin: center;
+  }
+</style>
+</head>
+
+<body class="font-sans antialiased">
+
+<!-- ───────── TOP STRIP ───────── -->
+<header class="border-b-2 border-ink relative z-10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-3 flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.25em]">
+    <div class="flex items-center gap-3">
+      <span class="inline-block w-2 h-2 bg-terracotta rounded-full animate-pulse"></span>
+      <span class="brand-mark">Radius <span class="text-terracotta">//</span> Raziel</span>
+    </div>
+    <div class="hidden md:block">32.0561° N · 34.7573° E</div>
+    <div>Est. Jaffa · <span class="he normal-case tracking-normal">יפו</span></div>
+  </div>
+</header>
+
+<!-- ───────── MARQUEE ───────── -->
+<div class="border-b-2 border-ink bg-ink text-sand overflow-hidden relative z-10">
+  <div class="py-3 overflow-hidden">
+    <div class="marquee-track text-sm md:text-base font-mono uppercase tracking-[0.2em]">
+      <span class="flex items-center gap-12">
+        <span>Friday · 13:00 — Sunset</span><span>✕</span>
+        <span class="he normal-case tracking-normal text-base md:text-lg">שישי טוב</span><span>✕</span>
+        <span>Street &amp; Living Room</span><span>✕</span>
+        <span>Live Street Art</span><span>✕</span>
+        <span>Flash Tattoos</span><span>✕</span>
+        <span class="he normal-case tracking-normal text-base md:text-lg">מחירי שכונה</span><span>✕</span>
+        <span>Cold Beers</span><span>✕</span>
+        <span>Local Beats</span><span>✕</span>
+        <span>Open Call for Vendors</span><span>✕</span>
+        <span>Free Entry · RSVP Required</span><span>✕</span>
+        <span>Good Neighbors</span><span>✕</span>
+        <span>Distance Zero</span><span>✕</span>
+        <span class="he normal-case tracking-normal text-base md:text-lg">רחוב דוד רזיאל</span><span>✕</span>
+      </span>
+      <span class="flex items-center gap-12" aria-hidden="true">
+        <span>Friday · 13:00 — Sunset</span><span>✕</span>
+        <span class="he normal-case tracking-normal text-base md:text-lg">שישי טוב</span><span>✕</span>
+        <span>Street &amp; Living Room</span><span>✕</span>
+        <span>Live Street Art</span><span>✕</span>
+        <span>Flash Tattoos</span><span>✕</span>
+        <span class="he normal-case tracking-normal text-base md:text-lg">מחירי שכונה</span><span>✕</span>
+        <span>Cold Beers</span><span>✕</span>
+        <span>Local Beats</span><span>✕</span>
+        <span>Open Call for Vendors</span><span>✕</span>
+        <span>Free Entry · RSVP Required</span><span>✕</span>
+        <span>Good Neighbors</span><span>✕</span>
+        <span>Distance Zero</span><span>✕</span>
+        <span class="he normal-case tracking-normal text-base md:text-lg">רחוב דוד רזיאל</span><span>✕</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ───────── HERO ───────── -->
+<section class="relative overflow-hidden border-b-2 border-ink">
+
+  <!-- Decorative concentric circles -->
+  <svg class="absolute -left-40 -bottom-56 w-[720px] h-[720px] pointer-events-none opacity-[0.07]" viewBox="0 0 720 720" aria-hidden="true">
+    <circle cx="360" cy="360" r="358" fill="none" stroke="#0E0E0C" stroke-width="2"/>
+    <circle cx="360" cy="360" r="260" fill="none" stroke="#0E0E0C" stroke-width="1" stroke-dasharray="3 5"/>
+    <circle cx="360" cy="360" r="160" fill="none" stroke="#0E0E0C" stroke-width="1" stroke-dasharray="1 3"/>
+    <circle cx="360" cy="360" r="6"   fill="#0E0E0C"/>
+    <line x1="360" y1="100" x2="360" y2="620" stroke="#0E0E0C" stroke-width="0.5"/>
+    <line x1="100" y1="360" x2="620" y2="360" stroke="#0E0E0C" stroke-width="0.5"/>
+  </svg>
+
+  <div class="absolute right-2 top-10 watermark text-[80px] md:text-[160px] leading-none">32.0561°N</div>
+  <div class="absolute right-6 bottom-10 watermark text-[60px] md:text-[120px] leading-none">34.7573°E</div>
+
+  <div class="relative max-w-7xl mx-auto px-5 md:px-8 pt-14 md:pt-20 pb-20 md:pb-28">
+
+    <div class="flex items-start justify-between gap-6 mb-10 md:mb-14">
+      <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em]">
+        <div>A slow Friday in Jaffa</div>
+        <div class="text-ink/55">Vol. 01 / Hosted by <span class="brand-mark text-ink">Postel</span></div>
+      </div>
+      <div class="stamp border-2 border-ink px-3 py-2 font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] bg-sand text-center">
+        Open<br>Door
+        <div class="he normal-case tracking-normal text-[9px] md:text-[10px] text-ink/60 mt-0.5">דלת פתוחה</div>
+      </div>
+    </div>
+
+    <h1 class="brand-mark stencil font-black uppercase text-[20vw] md:text-[14vw] lg:text-[200px]">
+      Radius<br>
+      <span class="text-mustard">//</span>&nbsp;Raziel
+    </h1>
+
+    <div class="mt-10 md:mt-14 grid md:grid-cols-12 gap-6 md:gap-10 items-end">
+      <p class="md:col-span-7 font-serif italic text-2xl md:text-3xl leading-snug">
+        Friday. The couch spills onto the sidewalk. The sidewalk spills back. Somewhere around four, nobody can really tell which is which — and honestly, that&rsquo;s sort of the whole point.
+      </p>
+      <div class="md:col-span-4 md:col-start-9 flex flex-col gap-3 md:items-end">
+        <a href="#rsvp" class="group inline-flex items-center gap-3 border-2 border-ink px-5 py-3 font-mono text-xs uppercase tracking-[0.25em] bg-mustard hover:bg-ink hover:text-sand transition-colors">
+          <span>Join the Guestlist</span>
+          <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+        <a href="#open-call" class="group inline-flex items-center gap-3 border-2 border-ink px-5 py-3 font-mono text-xs uppercase tracking-[0.25em] hover:bg-ink hover:text-sand transition-colors">
+          <span>Set Up a Stand</span>
+          <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───────── REFERENCE STILL ───────── -->
+<section class="border-b-2 border-ink relative bg-ink">
+  <div class="relative overflow-hidden">
+
+    <img src="Gemini_Generated_Image_s2jtaks2jtaks2jt.png"
+         alt="A Friday block party on David Raziel St., Jaffa — Vol. 00"
+         loading="lazy"
+         class="w-full h-[55vh] md:h-[78vh] object-cover"
+         style="filter: brightness(0.72) contrast(1.18) saturate(0.82);" />
+
+    <div class="absolute inset-0 pointer-events-none"
+         style="background: linear-gradient(180deg, rgba(14,14,12,0.55) 0%, rgba(14,14,12,0.10) 30%, rgba(14,14,12,0.15) 60%, rgba(14,14,12,0.88) 100%);"></div>
+
+    <div class="absolute inset-0 pointer-events-none mix-blend-multiply opacity-55"
+         style="background-image: url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0.45 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>&quot;);"></div>
+
+    <div class="absolute top-4 md:top-7 left-4 md:left-7 font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-sand flex items-center gap-2">
+      <span class="inline-block w-1.5 h-1.5 bg-mustard"></span>
+      <span>/ Field Recording — Vol. 00</span>
+    </div>
+
+    <div class="absolute top-4 md:top-7 right-4 md:right-7 font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-sand/70 hidden md:block">
+      32.0561° N · 34.7573° E
+    </div>
+
+    <div class="absolute bottom-5 md:bottom-10 left-4 md:left-10 right-4 md:right-10 flex items-end justify-between gap-6">
+      <div class="max-w-3xl">
+        <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-mustard mb-3">/ Same street. Last summer.</div>
+        <div class="font-black uppercase stencil text-sand text-3xl md:text-5xl lg:text-6xl leading-[0.88]">
+          We took the photos.<br>
+          <span class="text-mustard">We&rsquo;re throwing</span> the next one.
+        </div>
+      </div>
+      <div class="font-mono text-[10px] uppercase tracking-[0.3em] text-sand/60 text-right hidden md:block whitespace-nowrap">
+        17:42<br>
+        Sunset −2h
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───────── MANIFESTO ───────── -->
+<section class="relative border-b-2 border-ink">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28 grid md:grid-cols-12 gap-10">
+    <div class="md:col-span-4">
+      <div class="font-mono text-xs uppercase tracking-[0.25em] mb-6">/ 01 — Manifesto</div>
+      <h2 class="font-black uppercase text-5xl md:text-6xl stencil">
+        Distance<br>Zero.
+      </h2>
+      <div class="mt-8 inline-flex items-center gap-2 border-2 border-ink px-3 py-1 font-mono text-[10px] uppercase tracking-[0.25em]">
+        <span class="inline-block w-1.5 h-1.5 bg-mustard"></span>
+        <span>No velvet rope</span>
+      </div>
+    </div>
+
+    <div class="md:col-span-7 md:col-start-6 space-y-10">
+
+      <div>
+        <p class="he-serif text-xl md:text-2xl leading-relaxed">
+          יש רחוב ביפו שבו הבניינים נשענים קצת אחד על השני, החתולים מכירים את כולם בשם, ופעם בכמה זמן הדלת של הוסטל קואו־ליבינג קטן נשארת פתוחה הרבה אחרי הצהריים.
+        </p>
+        <p class="font-serif italic text-base md:text-lg leading-relaxed text-ink/55 mt-3">
+          There&rsquo;s a street in Jaffa where the buildings lean a little on one another, the cats know everyone by name, and once in a while the door of a small co-living place stays open long after lunch.
+        </p>
+      </div>
+
+      <div>
+        <p class="he-serif text-xl md:text-2xl leading-relaxed">
+          מישהו גורר רמקול החוצה. השכנה משתי קומות למעלה יורדת עם קערה של משהו. בחור שמצייר על קירות מופיע עם פחית צבע. לפני שהשיר השני נגמר, המדרכה היא הסלון והסלון הוא המדרכה.
+        </p>
+        <p class="font-serif italic text-base md:text-lg leading-relaxed text-ink/55 mt-3">
+          Somebody drags a speaker outside. The neighbor from two floors up comes down with a bowl of something. A guy who paints walls shows up with a can of paint. Before the second song ends, the sidewalk is the living room and the living room is the sidewalk.
+        </p>
+      </div>
+
+<div class="pt-4 font-mono text-[11px] uppercase tracking-[0.25em] text-ink/60">
+        — <span class="brand-mark">Postel</span> &amp; the neighbors of <span class="he-inline normal-case tracking-normal text-sm">רחוב דוד רזיאל</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── THE HOST ───────── -->
+<section class="border-b-2 border-ink relative overflow-hidden bg-sand-2/60">
+
+  <!-- background watermark -->
+  <div class="absolute -right-6 -bottom-10 watermark text-[140px] md:text-[280px] leading-none">POSTEL</div>
+
+  <div class="relative max-w-7xl mx-auto px-5 md:px-8 py-14 md:py-20 grid md:grid-cols-12 gap-8 md:gap-10 items-end">
+
+    <div class="md:col-span-4">
+      <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-ink/60 mb-3 flex items-center gap-2">
+        <span class="inline-block w-1.5 h-1.5 bg-mustard"></span>
+        <span>/ The Host</span>
+      </div>
+      <div class="brand-mark font-black uppercase stencil text-6xl md:text-7xl lg:text-8xl">
+        Postel<span class="text-mustard">.</span>
+      </div>
+      <div class="he normal-case tracking-normal text-base md:text-lg text-ink/65 mt-3">
+        הוסטל קואו־ליבינג ברחוב דוד רזיאל, יפו
+      </div>
+    </div>
+
+    <div class="md:col-span-5">
+      <p class="font-serif text-lg md:text-xl leading-relaxed">
+        A small co-living hostel on David Raziel St. They open the door, drag the couch onto the sidewalk, and turn the threshold into a stage. Everyone else you&rsquo;ll see on the block that afternoon is here because <span class="brand-mark italic">Postel</span> invited us first.
+      </p>
+    </div>
+
+    <div class="md:col-span-3 md:text-right space-y-3">
+      <div class="border-2 border-ink bg-sand p-4">
+        <div class="font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60 mb-2">/ Address</div>
+        <div class="font-black uppercase stencil text-xl leading-tight">David Raziel St.<br>Jaffa</div>
+        <div class="he normal-case tracking-normal text-sm text-ink/65 mt-1">רחוב דוד רזיאל, יפו</div>
+      </div>
+      <a href="#" class="group inline-flex items-center gap-2 border-2 border-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.25em] bg-ink text-sand hover:bg-mustard hover:text-ink transition-colors">
+        <span>Visit Postel</span>
+        <span class="inline-block transition-transform group-hover:translate-x-1">↗</span>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ───────── DETAILS ───────── -->
+<section class="border-b-2 border-ink bg-ink text-sand relative">
+  <div class="absolute right-6 top-6 font-mono text-[10px] uppercase tracking-[0.25em] text-sand/40">32.0561° N · 34.7573° E</div>
+
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
+    <div class="flex items-end justify-between mb-10">
+      <div>
+        <div class="font-mono text-xs uppercase tracking-[0.25em] mb-3 text-mustard">/ 02 — In the Radius</div>
+        <h2 class="font-black uppercase text-5xl md:text-6xl stencil">The Coordinates.</h2>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 border-2 border-sand">
+      <!-- WHEN -->
+      <div class="p-7 md:p-9 border-b-2 md:border-b-0 md:border-r-2 border-sand">
+        <div class="flex items-start justify-between mb-5">
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-sand/60">When</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-sand/60">/ 01</span>
+        </div>
+        <div class="font-black uppercase text-3xl md:text-4xl stencil leading-tight">
+          Friday<br>
+          <span class="text-mustard">13:00</span> — Sunset
+        </div>
+        <p class="font-serif italic text-sand/70 mt-5">As long as the sun&rsquo;s up, the speakers stay on.</p>
+      </div>
+
+      <!-- WHERE -->
+      <div class="p-7 md:p-9 border-b-2 md:border-b-0 md:border-r-2 border-sand">
+        <div class="flex items-start justify-between mb-5">
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-sand/60">Where</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-sand/60">/ 02</span>
+        </div>
+        <div class="font-black uppercase text-3xl md:text-4xl stencil leading-tight">
+          David Raziel St.<br>
+          Co-Living Hub
+        </div>
+        <div class="he-serif text-sand/60 mt-3 text-lg">רחוב דוד רזיאל · יפו</div>
+        <p class="font-serif italic text-sand/70 mt-4">Jaffa. The exact pin drops in your phone the morning of.</p>
+      </div>
+
+      <!-- WHAT -->
+      <div class="p-7 md:p-9">
+        <div class="flex items-start justify-between mb-5">
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-sand/60">In the Radius</span>
+          <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-sand/60">/ 03</span>
+        </div>
+        <ul class="font-black uppercase text-2xl md:text-3xl stencil leading-tight space-y-2">
+          <li><span class="text-mustard">+</span> Live Street Art</li>
+          <li><span class="text-mustard">+</span> Cold Beers</li>
+          <li><span class="text-mustard">+</span> Local Beats</li>
+          <li><span class="text-mustard">+</span> Good Neighbors</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── LINEUP & BAR ───────── -->
+<section class="border-b-2 border-ink relative">
+  <div class="absolute right-0 top-10 watermark text-[80px] md:text-[180px] leading-none">₪20</div>
+
+  <div class="relative max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
+
+    <div class="grid md:grid-cols-12 gap-10 mb-12">
+      <div class="md:col-span-5">
+        <div class="font-mono text-xs uppercase tracking-[0.25em] mb-3">/ 03 — Who&rsquo;s On / What&rsquo;s Cold</div>
+        <h2 class="font-black uppercase stencil text-5xl md:text-7xl">
+          The lineup.<br>
+          <span class="text-mustard">The bar.</span>
+        </h2>
+      </div>
+      <div class="md:col-span-6 md:col-start-7 space-y-5">
+        <p class="font-serif text-xl md:text-2xl leading-relaxed">
+          Local DJs, a crew you probably already know, one good speaker parked in the doorway, and a bar that won&rsquo;t gouge you. Each set rolls into the next until the sun drops behind the buildings.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 md:gap-8 items-start">
+
+      <!-- ─── LINEUP CARD ─── -->
+      <div class="border-2 border-ink bg-sand">
+        <div class="border-b-2 border-ink px-5 py-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.25em] bg-ink text-sand">
+          <span>/ The Lineup</span>
+          <span class="text-mustard">★ 13:00 → Sunset</span>
+        </div>
+
+        <ul class="divide-y-2 divide-ink">
+          <li class="p-5 flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <div class="font-black uppercase stencil text-2xl md:text-3xl brand-mark">DJ Sarit Falafel</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Mizrahi funk. Vinyl only.</div>
+            </div>
+            <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink/60 whitespace-nowrap">13:00 — 15:00</div>
+          </li>
+
+          <li class="p-5 flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <div class="font-black uppercase stencil text-2xl md:text-3xl brand-mark">The Block Boys</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Live hip-hop. Three mics, one beat machine.</div>
+            </div>
+            <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink/60 whitespace-nowrap">15:00 — 16:30</div>
+          </li>
+
+          <li class="p-5 flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <div class="font-black uppercase stencil text-2xl md:text-3xl brand-mark">Yafo Sound System</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Dub, reggae, bass to rattle the second-floor windows.</div>
+            </div>
+            <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink/60 whitespace-nowrap">16:30 — 18:00</div>
+          </li>
+
+          <li class="p-5 flex items-start justify-between gap-4">
+            <div class="min-w-0">
+              <div class="font-black uppercase stencil text-2xl md:text-3xl brand-mark">Mama Cassette</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Vintage cassettes. French-Levantine. A late-afternoon set that lands at every age.</div>
+            </div>
+            <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink/60 whitespace-nowrap">18:00 — 19:00</div>
+          </li>
+
+          <li class="p-5 flex items-start justify-between gap-4 bg-mustard">
+            <div class="min-w-0">
+              <div class="font-black uppercase stencil text-2xl md:text-3xl brand-mark">Postel House Band</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Closing the day on the couch out front. Acoustic, slow, on purpose.</div>
+            </div>
+            <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink whitespace-nowrap">19:00 → ?</div>
+          </li>
+        </ul>
+
+        <div class="border-t-2 border-ink p-4 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60 flex items-center gap-2 bg-sand-2">
+          <span class="inline-block w-1.5 h-1.5 bg-terracotta"></span>
+          <span>Live mural all day · Rehov 12 Collective</span>
+        </div>
+      </div>
+
+      <!-- ─── BAR CARD ─── -->
+      <div class="border-2 border-ink bg-sand">
+        <div class="border-b-2 border-ink px-5 py-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.25em] bg-ink text-sand gap-3">
+          <span>/ The Bar</span>
+          <span class="text-mustard flex items-center gap-2">
+            <span>Block Prices</span>
+            <span class="he normal-case tracking-normal text-sm">מחירי שכונה</span>
+          </span>
+        </div>
+
+        <ul class="divide-y-2 divide-ink">
+          <li class="p-5 flex items-baseline justify-between gap-4">
+            <div class="min-w-0">
+              <div class="font-black uppercase stencil text-2xl md:text-3xl">Half-Liter Beer</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Local, from the brewery a few blocks over. Cold, actually.</div>
+            </div>
+            <div class="font-black stencil text-4xl md:text-5xl text-mustard whitespace-nowrap">₪20</div>
+          </li>
+
+          <li class="p-5 flex items-baseline justify-between gap-4">
+            <div class="min-w-0">
+              <div class="font-black uppercase stencil text-2xl md:text-3xl">Mint Lemonade</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Hand-squeezed three minutes before you order.</div>
+            </div>
+            <div class="font-black stencil text-4xl md:text-5xl text-mustard whitespace-nowrap">₪15</div>
+          </li>
+
+          <li class="p-5 flex items-baseline justify-between gap-4 bg-sand-2">
+            <div class="min-w-0">
+              <div class="font-black uppercase stencil text-2xl md:text-3xl">Bottle of Water</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Cold from the cooler. Bring the empty back to the bar.</div>
+            </div>
+            <div class="font-black stencil text-4xl md:text-5xl text-mustard whitespace-nowrap">₪5</div>
+          </li>
+        </ul>
+
+        <div class="border-t-2 border-ink p-4 font-serif italic text-sm md:text-base text-ink/70 bg-ink/[0.03]">
+          Real neighborhood prices. No tricks, no cover, no minimum. Cash and Bit both work.
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ───────── OPEN CALL · BRING A STAND ───────── -->
+<section id="open-call" class="border-b-2 border-ink relative overflow-hidden">
+
+  <div class="absolute -left-10 -bottom-32 font-black stencil text-[40vw] md:text-[24vw] leading-none text-ink/[0.04] pointer-events-none select-none">✱</div>
+
+  <div class="relative max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28">
+
+    <!-- Title row -->
+    <div class="grid md:grid-cols-12 gap-6 md:gap-10 items-end mb-10 md:mb-12">
+      <div class="md:col-span-8">
+        <div class="font-mono text-xs uppercase tracking-[0.25em] mb-3">/ 04 — Open Call</div>
+        <h2 class="font-black uppercase stencil text-5xl md:text-7xl">
+          Bring a <span class="text-mustard">stand.</span>
+        </h2>
+      </div>
+      <div class="md:col-span-4 md:flex md:justify-end">
+        <div class="inline-flex items-center gap-2 border-2 border-ink px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] bg-mustard">
+          <span class="inline-block w-1.5 h-1.5 bg-ink"></span>
+          <span>No booth fees · No middlemen</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- One tight intro paragraph -->
+    <p class="font-serif text-xl md:text-2xl leading-relaxed max-w-4xl mb-10 md:mb-12">
+      Maybe you bake on weekends, mix records in your bedroom, throw ceramics in a Florentin studio, or read tarot for friends who keep telling you to charge for it. Pick a corner of the pavement, bring a folding table, and we&rsquo;ll point you to a spot.
+    </p>
+
+    <!-- Triptych: real stand photos from past blocks -->
+    <figure class="border-2 border-ink relative overflow-hidden bg-ink mb-8 md:mb-10">
+      <img src="Gemini_Generated_Image_nq5ehnq5ehnq5ehn.png"
+           alt="Three stands from past blocks — vintage clothing, cold lemonade, flash tattoos"
+           loading="lazy"
+           class="block w-full"
+           style="filter: brightness(0.92) contrast(1.08) saturate(0.95);" />
+
+      <div class="absolute inset-0 pointer-events-none mix-blend-multiply opacity-35"
+           style="background-image: url(&quot;data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0 0.05 0 0 0 0.35 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>&quot;);"></div>
+
+      <div class="absolute top-3 md:top-4 left-3 md:left-4 font-mono text-[9px] md:text-[10px] uppercase tracking-[0.25em] text-sand/85 flex items-center gap-2">
+        <span class="inline-block w-1.5 h-1.5 bg-mustard"></span>
+        <span>/ From past blocks</span>
+      </div>
+
+      <figcaption class="absolute bottom-0 left-0 right-0 grid grid-cols-3 border-t-2 border-sand bg-ink/85">
+        <div class="border-r-2 border-sand px-3 py-2 md:py-3 flex items-center justify-between gap-2">
+          <span class="font-mono text-[9px] md:text-[11px] uppercase tracking-[0.2em] text-sand">Second-Hand Rack</span>
+          <span class="font-mono text-[9px] md:text-[11px] text-sand/50">01</span>
+        </div>
+        <div class="border-r-2 border-sand px-3 py-2 md:py-3 flex items-center justify-between gap-2 bg-mustard text-ink">
+          <span class="font-mono text-[9px] md:text-[11px] uppercase tracking-[0.2em]">Lemonade Cart · ₪15</span>
+          <span class="font-mono text-[9px] md:text-[11px] text-ink/60">02</span>
+        </div>
+        <div class="px-3 py-2 md:py-3 flex items-center justify-between gap-2">
+          <span class="font-mono text-[9px] md:text-[11px] uppercase tracking-[0.2em] text-sand">Flash Tattoos</span>
+          <span class="font-mono text-[9px] md:text-[11px] text-sand/50">03</span>
+        </div>
+      </figcaption>
+    </figure>
+
+    <!-- Slim chip row — more types -->
+    <div class="mb-12 md:mb-14 flex flex-wrap items-center gap-2">
+      <span class="font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60 mr-2">+ also welcome:</span>
+      <span class="border-2 border-ink px-3 py-1.5 font-mono text-xs uppercase tracking-[0.15em]">DJ Set</span>
+      <span class="border-2 border-ink px-3 py-1.5 font-mono text-xs uppercase tracking-[0.15em]">Live Mural</span>
+      <span class="border-2 border-ink px-3 py-1.5 font-mono text-xs uppercase tracking-[0.15em]">Cookies / Bakes</span>
+      <span class="border-2 border-ink px-3 py-1.5 font-mono text-xs uppercase tracking-[0.15em]">Ceramics</span>
+      <span class="border-2 border-ink px-3 py-1.5 font-mono text-xs uppercase tracking-[0.15em]">Zines &amp; Prints</span>
+      <span class="border-2 border-ink px-3 py-1.5 font-mono text-xs uppercase tracking-[0.15em]">Plant Swap</span>
+      <span class="border-2 border-ink px-3 py-1.5 font-mono text-xs uppercase tracking-[0.15em]">Whatever You Got</span>
+    </div>
+
+    <!-- Form -->
+    <form id="vendor-form" class="grid md:grid-cols-12 gap-6 md:gap-8 items-stretch">
+      <div class="md:col-span-7 border-2 border-ink bg-sand">
+        <label class="block border-b-2 border-ink">
+          <span class="block px-4 pt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60">Your name / project</span>
+          <input type="text" name="project" required
+                 class="w-full px-4 pb-3 bg-transparent font-sans text-xl md:text-2xl"
+                 placeholder="Sarit's Mizrahi Bakes" />
+        </label>
+        <label class="block border-b-2 border-ink">
+          <span class="block px-4 pt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60">What you are bringing</span>
+          <textarea name="pitch" rows="3" required
+                    class="w-full px-4 pb-3 bg-transparent font-sans text-lg md:text-xl resize-none"
+                    placeholder="A two-meter stand with three kinds of cookies, an old radio, and my grandma's tablecloth."></textarea>
+        </label>
+        <div class="grid grid-cols-2">
+          <label class="block border-r-2 border-ink">
+            <span class="block px-4 pt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60">Contact</span>
+            <input type="text" name="contact" required
+                   class="w-full px-4 pb-3 bg-transparent font-sans text-lg md:text-xl"
+                   placeholder="@handle / 050-000-0000" />
+          </label>
+          <label class="block">
+            <span class="block px-4 pt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60">Needs power?</span>
+            <select name="power" class="w-full px-4 pb-3 bg-transparent font-sans text-lg md:text-xl appearance-none">
+              <option>No, I'm self-contained</option>
+              <option>Yes, one outlet is fine</option>
+              <option>Yes, full DJ rig</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="md:col-span-5 flex flex-col justify-between gap-5">
+        <div class="border-2 border-ink p-5 bg-sand-2">
+          <div class="font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60 mb-3">/ How it works</div>
+          <ol class="font-serif text-base md:text-lg leading-relaxed space-y-2">
+            <li><span class="font-mono text-xs mr-2">01·</span> You pitch.</li>
+            <li><span class="font-mono text-xs mr-2">02·</span> We read every one over coffee.</li>
+            <li><span class="font-mono text-xs mr-2">03·</span> If it fits, we send back a corner, a load-in time, and the neighbor you&rsquo;ll share the curb with.</li>
+          </ol>
+        </div>
+
+        <button type="submit"
+                class="bg-ink text-sand hover:bg-mustard hover:text-ink border-2 border-ink py-6 md:py-7 font-black uppercase stencil text-2xl md:text-3xl transition-colors flex items-center justify-center gap-4">
+          <span>Pitch Your Stand</span>
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+<!-- ───────── RSVP ───────── -->
+<section id="rsvp" class="border-b-2 border-ink relative overflow-hidden">
+
+  <div class="absolute -bottom-32 -right-10 font-black stencil text-[40vw] md:text-[28vw] leading-none text-ink/[0.04] pointer-events-none select-none">0</div>
+
+  <div class="relative max-w-7xl mx-auto px-5 md:px-8 py-20 md:py-28 grid md:grid-cols-12 gap-10 md:gap-16">
+
+    <div class="md:col-span-5">
+      <div class="font-mono text-xs uppercase tracking-[0.25em] mb-4">/ 05 — Guestlist</div>
+      <h2 class="font-black uppercase stencil text-5xl md:text-7xl">
+        Step<br>
+        inside<br>
+        the radius.
+      </h2>
+
+      <div class="mt-7 inline-flex items-center gap-2 border-2 border-ink px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.25em] bg-mustard">
+        <span class="inline-block w-1.5 h-1.5 bg-ink"></span>
+        <span>Free Entry · RSVP Required</span>
+      </div>
+
+      <p class="font-serif italic text-xl md:text-2xl mt-7 max-w-md leading-snug">
+        No cover, no door fee, no minimum. But the curb only fits so many — so drop your name and we&rsquo;ll save you the spot.
+      </p>
+      <p class="font-serif text-base md:text-lg mt-4 max-w-md leading-snug text-ink/65">
+        A few hours before the door opens we&rsquo;ll send the exact pin, the easiest way to walk in, and a soft warning about parking (there isn&rsquo;t any).
+      </p>
+      <div class="mt-8 flex items-center gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60">
+        <span class="inline-block w-1.5 h-1.5 bg-mustard"></span>
+        <span>Capacity is the sidewalk. First name in, first beer cold.</span>
+      </div>
+    </div>
+
+    <form id="rsvp-form" class="md:col-span-6 md:col-start-7 self-end">
+      <div class="border-2 border-ink bg-sand">
+        <label class="block border-b-2 border-ink">
+          <span class="block px-4 pt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60">Name</span>
+          <input type="text" name="name" required autocomplete="name"
+                 class="w-full px-4 pb-3 bg-transparent font-sans text-xl md:text-2xl"
+                 placeholder="Your name here" />
+        </label>
+        <label class="block">
+          <span class="block px-4 pt-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60">Phone</span>
+          <input type="tel" name="phone" required autocomplete="tel" pattern="[0-9\-\s\+\(\)]{7,}"
+                 class="w-full px-4 pb-3 bg-transparent font-sans text-xl md:text-2xl"
+                 placeholder="050-000-0000" />
+        </label>
+      </div>
+
+      <button type="submit"
+              class="mt-5 w-full bg-mustard hover:bg-ink hover:text-mustard border-2 border-ink py-6 md:py-7 font-black uppercase stencil text-2xl md:text-3xl transition-colors flex items-center justify-center gap-4">
+        <span>Secure a Spot in the Radius</span>
+        <span aria-hidden="true">→</span>
+      </button>
+
+      <div class="mt-4 flex items-start gap-3 font-mono text-[10px] uppercase tracking-[0.25em] text-ink/60">
+        <span class="border border-ink/40 px-1.5 py-0.5">i</span>
+        <span>We won&rsquo;t text you about anything else. Promise.</span>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+<!-- ───────── FOOTER ───────── -->
+<footer class="bg-ink text-sand">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-12 md:py-16 grid md:grid-cols-12 gap-10 items-end">
+
+    <div class="md:col-span-6">
+      <div class="brand-mark font-black uppercase stencil text-4xl md:text-5xl">
+        Radius <span class="text-mustard">//</span> Raziel
+      </div>
+      <div class="font-serif italic text-sand/70 mt-3 text-lg">
+        A street, a sofa, a sound system.
+      </div>
+    </div>
+
+    <div class="md:col-span-3 font-mono text-[11px] uppercase tracking-[0.25em] text-sand/70 space-y-1.5">
+      <div class="text-sand">Location</div>
+      <div>David Raziel St., Jaffa</div>
+      <div class="he normal-case tracking-normal text-base text-sand">רחוב דוד רזיאל, יפו</div>
+      <div>32.0561° N · 34.7573° E</div>
+    </div>
+
+    <div class="md:col-span-3 font-mono text-[11px] uppercase tracking-[0.25em] text-sand/70 space-y-1.5 md:text-right">
+      <div class="text-sand">Hosted by</div>
+      <div class="brand-mark">Postel Co-Living</div>
+      <div>&amp; the neighbors</div>
+      <div>Vol. 01 · Friday</div>
+    </div>
+
+  </div>
+  <div class="border-t border-sand/20">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-sand/50">
+      <span class="brand-mark">© Radius // Raziel</span>
+      <span>Street &amp; Living Room</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('rsvp-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = this.querySelector('button[type="submit"]');
+    btn.innerHTML = '<span>You are on the list</span><span aria-hidden="true">✕</span>';
+    btn.disabled = true;
+    btn.classList.remove('hover:bg-ink', 'hover:text-mustard');
+    btn.classList.add('bg-ink', 'text-mustard', 'cursor-default');
+  });
+
+  document.getElementById('vendor-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = this.querySelector('button[type="submit"]');
+    btn.innerHTML = '<span>Pitch received — we will be in touch</span><span aria-hidden="true">✕</span>';
+    btn.disabled = true;
+    btn.classList.remove('hover:bg-mustard', 'hover:text-ink', 'bg-ink', 'text-sand');
+    btn.classList.add('bg-mustard', 'text-ink', 'cursor-default');
+  });
+</script>
+
+</body>
+</html>
