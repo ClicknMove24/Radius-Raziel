@@ -223,7 +223,7 @@
 
     <div class="mt-10 md:mt-14 grid md:grid-cols-12 gap-6 md:gap-10 items-end">
       <p class="md:col-span-7 font-serif italic text-2xl md:text-3xl leading-snug">
-        Friday. The couch spills onto the sidewalk. The sidewalk spills back. Somewhere around four, nobody can really tell which is which — and honestly, that&rsquo;s sort of the whole point.
+        Friday. The couch spills onto the sidewalk. The sidewalk spills back. Somewhere around four, nobody can really tell which is which, and honestly, that&rsquo;s sort of the whole point.
       </p>
       <div class="md:col-span-4 md:col-start-9 flex flex-col gap-3 md:items-end">
         <a href="#rsvp" class="group inline-flex items-center gap-3 border-2 border-ink px-5 py-3 font-mono text-xs uppercase tracking-[0.25em] bg-mustard hover:bg-ink hover:text-sand transition-colors">
@@ -309,15 +309,15 @@
 
       <div>
         <p class="he-serif text-xl md:text-2xl leading-relaxed">
-          מישהו מוציא רמקול אל המדרכה. שכנה יורדת מהקומה השלישית עם קערה של משהו. צייר רחוב מופיע עם פחית צבע ביד. ולפני שהשיר השני נגמר — המדרכה כבר הסלון, והסלון כבר המדרכה.
+          מישהו מוציא רמקול לרחוב. השכנה מהקומה השלישית יורדת עם קערה ביד. צייר רחוב מגיע עם פחית צבע. עוד לא נגמר השיר השני, וכבר המדרכה היא הסלון והסלון הוא המדרכה.
         </p>
         <p class="font-serif italic text-base md:text-lg leading-relaxed text-ink/55 mt-3">
-          Someone wheels a speaker out to the curb. A neighbor comes down from the third floor with a bowl of something. A street artist shows up, paint can in hand. And before the second song ends — the sidewalk is already the living room, and the living room is already the sidewalk.
+          Someone wheels a speaker out into the street. The neighbor from the third floor comes down with a bowl in hand. A street artist shows up with a paint can. The second song hasn&rsquo;t even ended, and already the sidewalk is the living room and the living room is the sidewalk.
         </p>
       </div>
 
 <div class="pt-4 font-mono text-[11px] uppercase tracking-[0.25em] text-ink/60">
-        — <span class="brand-mark">Postel</span> &amp; the neighbors of <span class="he-inline normal-case tracking-normal text-sm">רחוב דוד רזיאל</span>
+        <span class="brand-mark">Postel</span> &amp; the neighbors of <span class="he-inline normal-case tracking-normal text-sm">רחוב דוד רזיאל</span>
       </div>
     </div>
   </div>
@@ -356,7 +356,7 @@
         <div class="font-black uppercase stencil text-xl leading-tight">David Raziel St.<br>Jaffa</div>
         <div class="he normal-case tracking-normal text-sm text-ink/65 mt-1">רחוב דוד רזיאל, יפו</div>
       </div>
-      <a href="#" class="group inline-flex items-center gap-2 border-2 border-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.25em] bg-ink text-sand hover:bg-mustard hover:text-ink transition-colors">
+      <a href="https://posteltlv.com/" target="_blank" rel="noopener" class="group inline-flex items-center gap-2 border-2 border-ink px-4 py-2 font-mono text-xs uppercase tracking-[0.25em] bg-ink text-sand hover:bg-mustard hover:text-ink transition-colors">
         <span>Visit Postel</span>
         <span class="inline-block transition-transform group-hover:translate-x-1">↗</span>
       </a>
@@ -571,7 +571,7 @@
 
     <!-- One tight intro paragraph -->
     <p class="font-serif text-xl md:text-2xl leading-relaxed max-w-4xl mb-10 md:mb-12">
-      A second-hand rack, a cold lemonade stand, a flash-tattoo bench, your grandma&rsquo;s cookies — bring what you&rsquo;ve got. A folding table will do, and we&rsquo;ll find you a corner of the curb.
+      A second-hand rack, a cold lemonade stand, a flash-tattoo bench, your grandma&rsquo;s cookies. Bring what you&rsquo;ve got. A folding table will do, and we&rsquo;ll find you a corner of the curb.
     </p>
 
     <!-- Triptych: real stand photos from past blocks -->
@@ -693,7 +693,7 @@
       </div>
 
       <p class="font-serif italic text-xl md:text-2xl mt-7 max-w-md leading-snug">
-        No cover, no door fee, no minimum. But the curb only fits so many — so drop your name and we&rsquo;ll save you the spot.
+        No cover, no door fee, no minimum. But the curb only fits so many, so drop your name and we&rsquo;ll save you the spot.
       </p>
       <p class="font-serif text-base md:text-lg mt-4 max-w-md leading-snug text-ink/65">
         A few hours before the door opens we&rsquo;ll send the exact pin, the easiest way to walk in, and a soft warning about parking (there isn&rsquo;t any).
@@ -772,7 +772,12 @@
 </footer>
 
 <!-- ───────── BACKGROUND MUSIC ───────── -->
-<audio id="bg-audio" loop preload="auto" src="Alan%20Fitzpatrick%20-%20Unite.mp4"></audio>
+<!-- Using <video> (not <audio>) because iOS handles MP4 more reliably here.
+     playsinline + webkit-playsinline = iOS allows it to play without going fullscreen.
+     Positioned off-screen so no video is visible. -->
+<video id="bg-audio" loop preload="auto" playsinline webkit-playsinline
+       src="Alan%20Fitzpatrick%20-%20Unite.mp4"
+       style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;"></video>
 
 <script>
   // ───── Background music ─────
@@ -825,7 +830,7 @@
   document.getElementById('vendor-form').addEventListener('submit', function (e) {
     e.preventDefault();
     var btn = this.querySelector('button[type="submit"]');
-    btn.innerHTML = '<span>Pitch received — we will be in touch</span><span aria-hidden="true">✕</span>';
+    btn.innerHTML = '<span>Pitch received. We will be in touch</span><span aria-hidden="true">✕</span>';
     btn.disabled = true;
     btn.classList.remove('hover:bg-mustard', 'hover:text-ink', 'bg-ink', 'text-sand');
     btn.classList.add('bg-mustard', 'text-ink', 'cursor-default');
