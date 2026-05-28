@@ -131,6 +131,7 @@
     transform: rotate(-6deg);
     transform-origin: center;
   }
+
 </style>
 </head>
 
@@ -206,7 +207,7 @@
 
     <div class="flex items-start justify-between gap-6 mb-10 md:mb-14">
       <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em]">
-        <div>A slow Friday in Jaffa</div>
+        <div>A loud Friday in Jaffa</div>
         <div class="text-ink/55">Vol. 01 / Hosted by <span class="brand-mark text-ink">Postel</span></div>
       </div>
       <div class="stamp border-2 border-ink px-3 py-2 font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] bg-sand text-center">
@@ -266,10 +267,10 @@
 
     <div class="absolute bottom-5 md:bottom-10 left-4 md:left-10 right-4 md:right-10 flex items-end justify-between gap-6">
       <div class="max-w-3xl">
-        <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-mustard mb-3">/ Same street. Last summer.</div>
-        <div class="font-black uppercase stencil text-sand text-3xl md:text-5xl lg:text-6xl leading-[0.88]">
-          We took the photos.<br>
-          <span class="text-mustard">We&rsquo;re throwing</span> the next one.
+        <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em] text-mustard mb-3">/ Inside the radius</div>
+        <div class="font-black uppercase stencil text-sand text-4xl md:text-6xl lg:text-7xl leading-[0.88]">
+          Door open.<br>
+          <span class="text-mustard">Volume up.</span>
         </div>
       </div>
       <div class="font-mono text-[10px] uppercase tracking-[0.3em] text-sand/60 text-right hidden md:block whitespace-nowrap">
@@ -299,19 +300,19 @@
 
       <div>
         <p class="he-serif text-xl md:text-2xl leading-relaxed">
-          יש רחוב ביפו שבו הבניינים נשענים קצת אחד על השני, החתולים מכירים את כולם בשם, ופעם בכמה זמן הדלת של הוסטל קואו־ליבינג קטן נשארת פתוחה הרבה אחרי הצהריים.
+          יש רחוב ביפו שבו הבניינים נשענים קצת אחד על השני, החתולים מכירים את כולם בשם, ופעם בכמה זמן הדלת של <span class="brand-mark">Postel</span> נשארת פתוחה הרבה אחרי הצהריים.
         </p>
         <p class="font-serif italic text-base md:text-lg leading-relaxed text-ink/55 mt-3">
-          There&rsquo;s a street in Jaffa where the buildings lean a little on one another, the cats know everyone by name, and once in a while the door of a small co-living place stays open long after lunch.
+          There&rsquo;s a street in Jaffa where the buildings lean a little on one another, the cats know everyone by name, and once in a while the door of <span class="brand-mark not-italic">Postel</span> stays open long after lunch.
         </p>
       </div>
 
       <div>
         <p class="he-serif text-xl md:text-2xl leading-relaxed">
-          מישהו גורר רמקול החוצה. השכנה משתי קומות למעלה יורדת עם קערה של משהו. בחור שמצייר על קירות מופיע עם פחית צבע. לפני שהשיר השני נגמר, המדרכה היא הסלון והסלון הוא המדרכה.
+          מישהו מוציא רמקול אל המדרכה. שכנה יורדת מהקומה השלישית עם קערה של משהו. צייר רחוב מופיע עם פחית צבע ביד. ולפני שהשיר השני נגמר — המדרכה כבר הסלון, והסלון כבר המדרכה.
         </p>
         <p class="font-serif italic text-base md:text-lg leading-relaxed text-ink/55 mt-3">
-          Somebody drags a speaker outside. The neighbor from two floors up comes down with a bowl of something. A guy who paints walls shows up with a can of paint. Before the second song ends, the sidewalk is the living room and the living room is the sidewalk.
+          Someone wheels a speaker out to the curb. A neighbor comes down from the third floor with a bowl of something. A street artist shows up, paint can in hand. And before the second song ends — the sidewalk is already the living room, and the living room is already the sidewalk.
         </p>
       </div>
 
@@ -487,7 +488,7 @@
           <li class="p-5 flex items-start justify-between gap-4 bg-mustard">
             <div class="min-w-0">
               <div class="font-black uppercase stencil text-2xl md:text-3xl brand-mark">Postel House Band</div>
-              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Closing the day on the couch out front. Acoustic, slow, on purpose.</div>
+              <div class="font-serif italic text-ink/70 text-sm md:text-base mt-2">Closing the day on the couch out front. Acoustic, warm, sun-down.</div>
             </div>
             <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.25em] text-ink whitespace-nowrap">19:00 → ?</div>
           </li>
@@ -570,7 +571,7 @@
 
     <!-- One tight intro paragraph -->
     <p class="font-serif text-xl md:text-2xl leading-relaxed max-w-4xl mb-10 md:mb-12">
-      Maybe you bake on weekends, mix records in your bedroom, throw ceramics in a Florentin studio, or read tarot for friends who keep telling you to charge for it. Pick a corner of the pavement, bring a folding table, and we&rsquo;ll point you to a spot.
+      A second-hand rack, a cold lemonade stand, a flash-tattoo bench, your grandma&rsquo;s cookies — bring what you&rsquo;ve got. A folding table will do, and we&rsquo;ll find you a corner of the curb.
     </p>
 
     <!-- Triptych: real stand photos from past blocks -->
@@ -770,7 +771,48 @@
   </div>
 </footer>
 
+<!-- ───────── BACKGROUND MUSIC ───────── -->
+<audio id="bg-audio" loop preload="auto" src="Alan%20Fitzpatrick%20-%20Unite.mp4"></audio>
+
 <script>
+  // ───── Background music ─────
+  // Strategy: start MUTED (browsers allow muted autoplay everywhere, even iOS Safari).
+  // On the first real user gesture we simply unmute — the audio is already playing,
+  // we just turn the volume on. If muted-autoplay also failed, we call play() again
+  // on the gesture as a fallback.
+  (function () {
+    var audio = document.getElementById('bg-audio');
+    if (!audio) return;
+
+    audio.volume = 1.0;
+    audio.muted  = true;
+
+    // Try to start playback right away (muted — almost always allowed)
+    audio.play().catch(function () { /* will retry on first gesture */ });
+
+    var gestureEvents = ['click','touchstart','touchend','pointerdown','pointerup','keydown','wheel'];
+
+    function unlockAudio() {
+      audio.muted = false;
+      audio.volume = 1.0;
+      // If muted autoplay failed (rare), or got paused for any reason, kick it again
+      if (audio.paused) {
+        var p = audio.play();
+        if (p && typeof p.catch === 'function') p.catch(function () {});
+      }
+      // Tear down listeners — the audio is now playing audibly
+      gestureEvents.forEach(function (ev) {
+        document.removeEventListener(ev, unlockAudio, true);
+      });
+    }
+
+    gestureEvents.forEach(function (ev) {
+      // capture: true so we catch the gesture before page handlers consume it
+      document.addEventListener(ev, unlockAudio, { capture: true, passive: true });
+    });
+  })();
+
+  // ───── Forms ─────
   document.getElementById('rsvp-form').addEventListener('submit', function (e) {
     e.preventDefault();
     var btn = this.querySelector('button[type="submit"]');
