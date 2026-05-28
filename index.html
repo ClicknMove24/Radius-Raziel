@@ -208,7 +208,7 @@
     <div class="flex items-start justify-between gap-6 mb-10 md:mb-14">
       <div class="font-mono text-[10px] md:text-xs uppercase tracking-[0.3em]">
         <div>A loud Friday in Jaffa</div>
-        <div class="text-ink/55">Vol. 01 / Hosted by <span class="brand-mark text-ink">Postel</span></div>
+        <div class="text-ink/55">Vol. 01 / Hosted by the <span class="brand-mark text-ink">Postel</span></div>
       </div>
       <div class="stamp border-2 border-ink px-3 py-2 font-mono text-[10px] md:text-xs uppercase tracking-[0.2em] bg-sand text-center">
         Open<br>Door
@@ -757,7 +757,7 @@
 
     <div class="md:col-span-3 font-mono text-[11px] uppercase tracking-[0.25em] text-sand/70 space-y-1.5 md:text-right">
       <div class="text-sand">Hosted by</div>
-      <div class="brand-mark">Postel Co-Living</div>
+      <div>the <span class="brand-mark">Postel</span></div>
       <div>&amp; the neighbors</div>
       <div>Vol. 01 · Friday</div>
     </div>
@@ -772,12 +772,12 @@
 </footer>
 
 <!-- ───────── BACKGROUND MUSIC ───────── -->
-<!-- Using <video> (not <audio>) because iOS handles MP4 more reliably here.
-     playsinline + webkit-playsinline = iOS allows it to play without going fullscreen.
-     Positioned off-screen so no video is visible. -->
-<video id="bg-audio" loop preload="auto" playsinline webkit-playsinline
-       src="Alan%20Fitzpatrick%20-%20Unite.mp4"
-       style="position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;"></video>
+<!-- Multiple sources: browser picks the first it can play.
+     MP4 first (user's choice), MP3 fallback so iOS / older mobile won't fail. -->
+<audio id="bg-audio" loop preload="auto" playsinline webkit-playsinline crossorigin="anonymous">
+  <source src="Alan%20Fitzpatrick%20-%20Unite.mp4" type="audio/mp4">
+  <source src="Alan%20Fitzpatrick%20-%20Unite%20%5Bmusic%5D.mp3" type="audio/mpeg">
+</audio>
 
 <script>
   // ───── Background music ─────
@@ -790,30 +790,37 @@
     if (!audio) return;
 
     audio.volume = 1.0;
-    audio.muted  = true;
 
-    // Try to start playback right away (muted — almost always allowed)
-    audio.play().catch(function () { /* will retry on first gesture */ });
+    var gestureEvents = ['click','touchstart','touchend','pointerdown','pointerup','keydown'];
+    var removed = false;
 
-    var gestureEvents = ['click','touchstart','touchend','pointerdown','pointerup','keydown','wheel'];
-
-    function unlockAudio() {
-      audio.muted = false;
-      audio.volume = 1.0;
-      // If muted autoplay failed (rare), or got paused for any reason, kick it again
-      if (audio.paused) {
-        var p = audio.play();
-        if (p && typeof p.catch === 'function') p.catch(function () {});
-      }
-      // Tear down listeners — the audio is now playing audibly
+    function removeListeners() {
+      if (removed) return;
+      removed = true;
       gestureEvents.forEach(function (ev) {
-        document.removeEventListener(ev, unlockAudio, true);
+        document.removeEventListener(ev, tryPlay, true);
       });
     }
 
+    function tryPlay() {
+      audio.muted  = false;
+      audio.volume = 1.0;
+      var p = audio.play();
+      if (p && typeof p.then === 'function') {
+        p.then(removeListeners).catch(function () {
+          /* still blocked, wait for next gesture */
+        });
+      } else {
+        removeListeners();
+      }
+    }
+
+    // Optimistic first attempt
+    tryPlay();
+
+    // Real path: wait for any gesture and call play() inside the handler
     gestureEvents.forEach(function (ev) {
-      // capture: true so we catch the gesture before page handlers consume it
-      document.addEventListener(ev, unlockAudio, { capture: true, passive: true });
+      document.addEventListener(ev, tryPlay, { capture: true, passive: true });
     });
   })();
 
